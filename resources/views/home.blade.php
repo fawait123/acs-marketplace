@@ -39,7 +39,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ asset('assets') }}/dist/img/user2-160x160.jpg"
                                 class="user-image img-circle elevation-2" alt="User Image">
-                            <span class="d-none d-md-inline">Alexander Pierce</span>
+                            <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <!-- User image -->
@@ -48,14 +48,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     class="img-circle elevation-2" alt="User Image">
 
                                 <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
+                                    {{ auth()->user()->name }} - {{ auth()->user()->role }}
+                                    <small>{{ auth()->user()->created_at->diffForHumans() }}</small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                <a href="#" class="btn btn-default btn-flat float-right">Sign out</a>
+                                <a href="#" class="btn btn-default btn-flat float-right" data-toggle="modal"
+                                    data-target="#modal-logout">Sign out</a>
                             </li>
                         </ul>
                     </li>
@@ -122,11 +123,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </aside>
     <!-- /.control-sidebar -->
 
+    <div class="modal fade" id="modal-logout">
+        <div class="modal-dialog">
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Logout</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>remove session {{ auth()->user()->name }}</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </div>
+                </div>
+            </form>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
     <!-- Main Footer -->
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            Anything you want
+            ACS (Agile Code Studio)
         </div>
         <!-- Default to the left -->
         <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights

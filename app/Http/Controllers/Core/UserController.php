@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -24,7 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('module.core.user.form');
     }
 
     /**
@@ -35,7 +37,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required|email:dns|unique:users,email',
+            'username'=>'required|unique:users,username',
+            'password'=>'required|min:8',
+            'role'=>'required'
+        ]);
+
+
+        User::create([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'username'=>$request->username,
+            'password'=>Hash::make($request->password),
+            'role'=>$request->role,
+        ]);
+
+        return redirect()->route('user.index')->with(['message'=>'Data created successfully']);
     }
 
     /**
@@ -57,7 +76,12 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        if($user){
+            return view('module.core.user.form',compact('id','user'));
+        }
+
+        return abort(404);
     }
 
     /**
@@ -69,7 +93,27 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required|email:dns|unique:users,email,'.$id,
+            'username'=>'required|unique:users,username,'.$id,
+            'role'=>'required'
+        ]);
+        $user = User::find($id);
+        $password = $user->password;
+        if(!is_null($request->password)){
+            $password = Hash::make($request->password);
+        }
+
+        $user->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'username'=>$request->username,
+            'password'=>$password,
+            'role'=>$request->role,
+        ]);
+
+        return redirect()->route('user.index')->with(['message'=>'Data updated successfully']);
     }
 
     /**
@@ -80,6 +124,69 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        if($user){
+            $user->delete();
+
+            return redirect()->route('user.index')->with(['message'=>'Data deleted successfully']);
+        }
+
+        return abort(404);
+    }
+
+
+    public function json(Request $request)
+    {
+        $columns = array(
+            0 =>'name',
+            0 =>'username',
+            1 =>'email',
+            2=> 'role',
+        );
+
+        $totalFiltered = User::query();
+
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        $query = User::query();
+        if(!empty($request->input('search.value'))){
+            $search = $request->input('search.value');
+            $query = $query->where('name', 'like','%'.$search.'%');
+            $totalFiltered = $totalFiltered->where('name', 'like','%'.$search.'%');
+
+        }
+        $query = $query->offset($start)->limit($limit)->orderBy($order,$dir)->latest()->get();
+
+        $data = array();
+        if(!empty($query)){
+            foreach ($query as $key=>$value){
+            $edit =  route('user.edit',$value->id);
+            $destroy =  route('user.destroy',$value->id);
+            $nestedData['no'] = (str_split($start)[0]) * $limit + $key + 1;
+            $nestedData['name'] = $value->name;
+            $nestedData['username'] = $value->username;
+            $nestedData['role'] = $value->role;
+            $nestedData['email'] = $value->email;
+            $nestedData['options'] = "&emsp;<a href='{$edit}'
+            class='text-primary'><i class='fa fa-edit'></i></a>
+                                    &emsp;<a href='#' data-toggle='modal'
+                                    data-target='#modal-delete' data-url='{$destroy}'
+                                    class='text-danger'><i class='fa fa-trash'></i></a>";
+            $data[] = $nestedData;
+            }
+        }
+
+
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval(User::count()),
+            "recordsFiltered" => intval($totalFiltered->count()),
+            "data"            => $data
+        );
+
+        return json_encode($json_data);
     }
 }
