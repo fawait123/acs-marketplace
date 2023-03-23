@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Core;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
@@ -108,7 +109,25 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+        $role->delete();
+        return redirect()->route('role.index')->with(['message'=>'Data deleted successfully']);
+    }
+
+    public function permission($id)
+    {
+        $role = Role::find($id);
+        $permissions = Permission::all();
+        $permission = $role->permissions;
+        return view('module.core.role.permission',compact('role','permissions','permission'));
+    }
+
+    public function permissionSync(Request $request)
+    {
+        $role = Role::where('name',$request->role)->first();
+
+        $role->syncPermissions($request->permission);
+        return 'success';
     }
 
     public function json(Request $request)
@@ -140,17 +159,20 @@ class RoleController extends Controller
             foreach ($query as $key=>$value){
             $edit =  route('role.edit',$value->id);
             $destroy =  route('role.destroy',$value->id);
+            $permission = route('role.permission',$value->id);
             $nestedData['no'] = (str_split($start)[0]) * $limit + $key + 1;
             $nestedData['name'] = $value->name;
             $nestedData['display_name'] = $value->display_name;
             if($value->name != 'superadmin'){
-                $nestedData['options'] = "&emsp;<a href='{$edit}'
+                $nestedData['options'] = "<a href='{$permission}' class='text-warning'><i class='fa fa-key'></i></a>";
+                $nestedData['options'] .= "&emsp;<a href='{$edit}'
                 class='text-primary'><i class='fa fa-edit'></i></a>
                                         &emsp;<a href='#' data-toggle='modal'
                                         data-target='#modal-delete' data-url='{$destroy}'
                                         class='text-danger'><i class='fa fa-trash'></i></a>";
             }else{
-                $nestedData['options'] = '<span class="badge bg-danger text-white">No Action</span>';
+                $nestedData['options'] = "<a href='{$permission}' class='text-warning'><i class='fa fa-key'></i></a>&nbsp;&nbsp;";
+                $nestedData['options'] .= '<span class="badge bg-danger text-white">No Action</span>';
             }
             $data[] = $nestedData;
             }
