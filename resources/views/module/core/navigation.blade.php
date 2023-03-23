@@ -17,9 +17,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('role.index') }}"
+                        class="nav-link  {{ Request::is('core/role*') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Roles</p>
+                        <p>Roles & Permission</p>
                     </a>
                 </li>
             </ul>
