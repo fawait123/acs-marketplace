@@ -1,7 +1,7 @@
 $(document).ready(function () {
     setTimeout(() => {
         $(".lds-dual-ring").addClass("d-none");
-    }, 1000);
+    }, 500);
 
     $("#modal-delete").on("show.bs.modal", function (e) {
         let target = e.relatedTarget;
