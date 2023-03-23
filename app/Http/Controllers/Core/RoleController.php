@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Core;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('module.core.user.index');
+        return view('module.core.role.index');
     }
 
     /**
@@ -27,8 +26,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $role = Role::all();
-        return view('module.core.user.form',compact('role'));
+        return view('module.core.role.form');
     }
 
     /**
@@ -40,25 +38,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|email:dns|unique:users,email',
-            'username'=>'required|unique:users,username',
-            'password'=>'required|min:8',
-            'role'=>'required'
+            'name'=>'required|unique:roles,name',
+            'display_name'=>'required'
         ]);
 
-
-        $user = User::create([
+        Role::create([
             'name'=>$request->name,
-            'email'=>$request->email,
-            'username'=>$request->username,
-            'password'=>Hash::make($request->password),
-            'role'=>$request->role,
+            'display_name'=>$request->display_name
         ]);
 
-        $user->assignRole($request->role);
-
-        return redirect()->route('user.index')->with(['message'=>'Data created successfully']);
+        return redirect()->route('role.index')->with(['message'=>'Data created successfully']);
     }
 
     /**
@@ -80,11 +69,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::with('roles')->find($id);
-        $role = Role::all();
-
-        if($user){
-            return view('module.core.user.form',compact('id','user','role'));
+        $role = Role::find($id);
+        if($role){
+            return view('module.core.role.form',compact('id','role'));
         }
 
         return abort(404);
@@ -100,28 +87,18 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|email:dns|unique:users,email,'.$id,
-            'username'=>'required|unique:users,username,'.$id,
-            'role'=>'required'
+            'name'=>'required|unique:roles,name,'.$id,
+            'display_name'=>'required'
         ]);
-        $user = User::find($id);
-        $password = $user->password;
-        if(!is_null($request->password)){
-            $password = Hash::make($request->password);
-        }
 
-        $user->update([
+        $role = Role::find($id);
+
+        $role->update([
             'name'=>$request->name,
-            'email'=>$request->email,
-            'username'=>$request->username,
-            'password'=>$password,
-            'role'=>$request->role,
+            'display_name'=>$request->display_name
         ]);
 
-        $user->syncRoles([$request->role]);
-
-        return redirect()->route('user.index')->with(['message'=>'Data updated successfully']);
+        return redirect()->route('role.index')->with(['message'=>'Data updated successfully']);
     }
 
     /**
@@ -132,34 +109,43 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        if($user){
-            $user->delete();
-
-            return redirect()->route('user.index')->with(['message'=>'Data deleted successfully']);
-        }
-
-        return abort(404);
+        $role = Role::find($id);
+        $role->delete();
+        return redirect()->route('role.index')->with(['message'=>'Data deleted successfully']);
     }
 
+    public function permission($id)
+    {
+        $role = Role::find($id);
+        $permissions = Permission::all();
+        $permission = $role->permissions;
+        return view('module.core.role.permission',compact('role','permissions','permission'));
+    }
+
+    public function permissionSync(Request $request)
+    {
+        $role = Role::where('name',$request->role)->first();
+
+        $role->syncPermissions($request->permission);
+        return 'success';
+    }
 
     public function json(Request $request)
     {
         $columns = array(
             0 =>'name',
-            0 =>'username',
-            1 =>'email',
-            2=> 'role',
+            1 =>'display_name',
+            2=>'display_name'
         );
 
-        $totalFiltered = User::query();
+        $totalFiltered = Role::query();
 
         $limit = $request->input('length');
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-        $query = User::query();
+        $query = Role::query();
         if(!empty($request->input('search.value'))){
             $search = $request->input('search.value');
             $query = $query->where('name', 'like','%'.$search.'%');
@@ -171,22 +157,22 @@ class UserController extends Controller
         $data = array();
         if(!empty($query)){
             foreach ($query as $key=>$value){
-            $edit =  route('user.edit',$value->id);
-            $destroy =  route('user.destroy',$value->id);
+            $edit =  route('role.edit',$value->id);
+            $destroy =  route('role.destroy',$value->id);
+            $permission = route('role.permission',$value->id);
             $nestedData['no'] = (str_split($start)[0]) * $limit + $key + 1;
             $nestedData['name'] = $value->name;
-            $nestedData['username'] = $value->username;
-            $nestedData['role'] = $value->role;
-            $nestedData['email'] = $value->email;
-            if($value->role != 'superadmin'){
-                $nestedData['options'] = "&emsp;<a href='{$edit}'
+            $nestedData['display_name'] = $value->display_name;
+            if($value->name != 'superadmin'){
+                $nestedData['options'] = "<a href='{$permission}' class='text-warning'><i class='fa fa-key'></i></a>";
+                $nestedData['options'] .= "&emsp;<a href='{$edit}'
                 class='text-primary'><i class='fa fa-edit'></i></a>
                                         &emsp;<a href='#' data-toggle='modal'
                                         data-target='#modal-delete' data-url='{$destroy}'
                                         class='text-danger'><i class='fa fa-trash'></i></a>";
             }else{
-                $nestedData['options'] = '<span class="badge bg-danger text-white">No Action</span>';
-
+                $nestedData['options'] = "<a href='{$permission}' class='text-warning'><i class='fa fa-key'></i></a>&nbsp;&nbsp;";
+                $nestedData['options'] .= '<span class="badge bg-danger text-white">No Action</span>';
             }
             $data[] = $nestedData;
             }
@@ -195,7 +181,7 @@ class UserController extends Controller
 
         $json_data = array(
             "draw"            => intval($request->input('draw')),
-            "recordsTotal"    => intval(User::count()),
+            "recordsTotal"    => intval(Role::count()),
             "recordsFiltered" => intval($totalFiltered->count()),
             "data"            => $data
         );
