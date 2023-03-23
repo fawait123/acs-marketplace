@@ -46,11 +46,11 @@
                         <label for="role">Role</label>
                         <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
                             <option value="">select</option>
-                            <option value="admin" {{ isset($id) ? ($user->role == 'admin' ? 'selected' : '') : '' }}>Admin
-                            </option>
-                            <option value="seller" {{ isset($id) ? ($user->role == 'seller' ? 'selected' : '') : '' }}>
-                                Seller
-                            </option>
+                            @foreach ($role as $item)
+                                <option value="{{ $item->name }}"
+                                    {{ isset($id) ? ($user->roles->pluck('name')[0] == $item->name ? 'selected' : '') : '' }}>
+                                    {{ $item->display_name }}</option>
+                            @endforeach
                         </select>
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Core;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -26,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('module.core.user.form');
+        $role = Role::all();
+        return view('module.core.user.form',compact('role'));
     }
 
     /**
@@ -46,13 +48,15 @@ class UserController extends Controller
         ]);
 
 
-        User::create([
+        $user = User::create([
             'name'=>$request->name,
             'email'=>$request->email,
             'username'=>$request->username,
             'password'=>Hash::make($request->password),
             'role'=>$request->role,
         ]);
+
+        $user->assignRole($request->role);
 
         return redirect()->route('user.index')->with(['message'=>'Data created successfully']);
     }
@@ -76,9 +80,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = User::with('roles')->find($id);
+        $role = Role::all();
+
         if($user){
-            return view('module.core.user.form',compact('id','user'));
+            return view('module.core.user.form',compact('id','user','role'));
         }
 
         return abort(404);
@@ -112,6 +118,8 @@ class UserController extends Controller
             'password'=>$password,
             'role'=>$request->role,
         ]);
+
+        $user->syncRoles([$request->role]);
 
         return redirect()->route('user.index')->with(['message'=>'Data updated successfully']);
     }
@@ -170,11 +178,16 @@ class UserController extends Controller
             $nestedData['username'] = $value->username;
             $nestedData['role'] = $value->role;
             $nestedData['email'] = $value->email;
-            $nestedData['options'] = "&emsp;<a href='{$edit}'
-            class='text-primary'><i class='fa fa-edit'></i></a>
-                                    &emsp;<a href='#' data-toggle='modal'
-                                    data-target='#modal-delete' data-url='{$destroy}'
-                                    class='text-danger'><i class='fa fa-trash'></i></a>";
+            if($value->role != 'superadmin'){
+                $nestedData['options'] = "&emsp;<a href='{$edit}'
+                class='text-primary'><i class='fa fa-edit'></i></a>
+                                        &emsp;<a href='#' data-toggle='modal'
+                                        data-target='#modal-delete' data-url='{$destroy}'
+                                        class='text-danger'><i class='fa fa-trash'></i></a>";
+            }else{
+                $nestedData['options'] = '<span class="badge bg-danger text-white">No Action</span>';
+
+            }
             $data[] = $nestedData;
             }
         }

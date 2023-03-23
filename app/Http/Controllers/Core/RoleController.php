@@ -115,7 +115,8 @@ class RoleController extends Controller
     {
         $columns = array(
             0 =>'name',
-            0 =>'display_name',
+            1 =>'display_name',
+            2=>'display_name'
         );
 
         $totalFiltered = Role::query();
@@ -142,11 +143,15 @@ class RoleController extends Controller
             $nestedData['no'] = (str_split($start)[0]) * $limit + $key + 1;
             $nestedData['name'] = $value->name;
             $nestedData['display_name'] = $value->display_name;
-            $nestedData['options'] = "&emsp;<a href='{$edit}'
-            class='text-primary'><i class='fa fa-edit'></i></a>
-                                    &emsp;<a href='#' data-toggle='modal'
-                                    data-target='#modal-delete' data-url='{$destroy}'
-                                    class='text-danger'><i class='fa fa-trash'></i></a>";
+            if($value->name != 'superadmin'){
+                $nestedData['options'] = "&emsp;<a href='{$edit}'
+                class='text-primary'><i class='fa fa-edit'></i></a>
+                                        &emsp;<a href='#' data-toggle='modal'
+                                        data-target='#modal-delete' data-url='{$destroy}'
+                                        class='text-danger'><i class='fa fa-trash'></i></a>";
+            }else{
+                $nestedData['options'] = '<span class="badge bg-danger text-white">No Action</span>';
+            }
             $data[] = $nestedData;
             }
         }
