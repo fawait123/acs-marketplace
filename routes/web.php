@@ -26,6 +26,7 @@ Route::get('/home',[HomeController::class,'index'])->name('home')->middleware('a
 
 
 Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
+    Route::post('user/status/{user}',[UserController::class,'status'])->name('user.status');
     Route::get('user/json',[UserController::class,'json'])->name('user.json')->middleware('permission:user');
     Route::get('role/json',[RoleController::class,'json'])->name('role.json')->middleware('permission:role');
     Route::get('role/permission/{id}',[RoleController::class,'permission'])->name('role.permission')->middleware('permission:role');
@@ -36,4 +37,6 @@ Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
 
 Route::group(['prefix'=>'notification','middleware'=>'auth'],function(){
     Route::get('show/{notification}',[NotificationController::class,'show'])->name('notification.show');
+    Route::get('/',[NotificationController::class,'index'])->name('notification.index');
+    Route::delete('destroy/{notification}',[NotificationController::class,'destroy'])->name('notification.destroy');
 });

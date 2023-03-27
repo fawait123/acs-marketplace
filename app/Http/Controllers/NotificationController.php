@@ -14,7 +14,8 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        $notif = Notification::with(['userTo','userFrom'])->where('to_user',auth()->user()->id)->get();
+        return view('notification.index',compact('notif'));
     }
 
     /**
@@ -46,7 +47,11 @@ class NotificationController extends Controller
      */
     public function show(Notification $notification)
     {
-        return view('notification.show',$notification);
+        Notification::where('id',$notification->id)->update([
+            'is_read'=>true
+        ]);
+        $notif = $notification;
+        return view('notification.show',compact('notif'));
     }
 
     /**
@@ -80,6 +85,7 @@ class NotificationController extends Controller
      */
     public function destroy(Notification $notification)
     {
-        //
+        $notification->delete();
+        return redirect()->back()->with(['message'=>'Data deleted successfully']);
     }
 }

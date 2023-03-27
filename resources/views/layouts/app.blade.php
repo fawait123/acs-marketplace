@@ -17,6 +17,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/plugins/toastr/toastr.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -145,6 +149,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.modal -->
 
+
+    {{-- modal delete notification --}}
+    <div class="modal fade" id="modal-destroy-notification">
+        <div class="modal-dialog">
+            <form action="{{ route('logout') }}" method="post" id="form-delete-notification">
+                @csrf
+                @method('delete')
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Notification</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Delete this notification ?</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </form>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
     <!-- Main Footer -->
     <footer class="main-footer">
         <!-- To the right -->
@@ -160,6 +192,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- REQUIRED SCRIPTS -->
 
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('assets') }}/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- Toastr -->
+    <script src="{{ asset('assets') }}/plugins/toastr/toastr.min.js"></script>
     <!-- jQuery -->
     <script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
@@ -169,6 +205,46 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('assets') }}/dist/js/demo.js"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    @stack('customjs')
+    {{-- toastr message --}}
+    @if (session('message'))
+        <script>
+            $(document).Toasts('create', {
+                title: 'Successfuly',
+                body: '{{ session('message') }}' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                class: 'bg-info'
+            })
+        </script>
+    @endif
+
+    @if (session('success'))
+        <script>
+            $(document).Toasts('create', {
+                title: 'Successfuly',
+                body: '{{ session('success') }}' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                class: 'bg-info'
+            })
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            $(document).Toasts('create', {
+                title: 'Error',
+                body: '{{ session('error') }}' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+                class: 'bg-error'
+            })
+        </script>
+    @endif
 </body>
 
 </html>
