@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\RoleController;
@@ -25,10 +26,14 @@ Route::get('/home',[HomeController::class,'index'])->name('home')->middleware('a
 
 
 Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
-    Route::get('user/json',[UserController::class,'json'])->name('user.json');
-    Route::get('role/json',[RoleController::class,'json'])->name('role.json');
-    Route::get('role/permission/{id}',[RoleController::class,'permission'])->name('role.permission');
-    Route::get('role/permission',[RoleController::class,'permissionSync'])->name('role.permission.sync');
-    Route::resource('user',UserController::class);
-    Route::resource('role',RoleController::class);
+    Route::get('user/json',[UserController::class,'json'])->name('user.json')->middleware('permission:user');
+    Route::get('role/json',[RoleController::class,'json'])->name('role.json')->middleware('permission:role');
+    Route::get('role/permission/{id}',[RoleController::class,'permission'])->name('role.permission')->middleware('permission:role');
+    Route::get('role/permission',[RoleController::class,'permissionSync'])->name('role.permission.sync')->middleware('permission:role');
+    Route::resource('user',UserController::class)->middleware('permission:user');
+    Route::resource('role',RoleController::class)->middleware('permission:role');
+});
+
+Route::group(['prefix'=>'notification','middleware'=>'auth'],function(){
+    Route::get('show/{notification}',[NotificationController::class,'show'])->name('notification.show');
 });
