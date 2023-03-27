@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\RoleController;
+use App\Helpers\Socket;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,6 +15,7 @@ Route::get('/', function () {
 Route::group(['prefix'=>'auth'],function(){
     Route::get('login',[AuthController::class,'login'])->name('login');
     Route::post('login',[AuthController::class,'actionLogin'])->name('action.login');
+    Route::post('register',[AuthController::class,'actionRegister'])->name('action.register');
     Route::get('register',[AuthController::class,'register'])->name('register');
     Route::post('logout',[AuthController::class,'logout'])->name('logout');
 });
