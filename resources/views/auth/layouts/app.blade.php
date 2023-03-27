@@ -1,10 +1,14 @@
+@php
+    $path = Route::current()->uri;
+    $path = explode('/', $path);
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Log in</title>
+    <title>AdminLTE 3 | {{ ucfirst(end($path)) }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"

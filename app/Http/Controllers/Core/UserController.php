@@ -202,4 +202,13 @@ class UserController extends Controller
 
         return json_encode($json_data);
     }
+
+    public function status(Request $request, User $user)
+    {
+        $user->update([
+            'is_active'=>1
+        ]);
+
+        return redirect()->back()->with(['message'=>'Account is active']);
+    }
 }

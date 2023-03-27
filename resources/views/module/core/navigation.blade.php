@@ -10,20 +10,24 @@
                 </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="{{ route('user.index') }}"
-                        class="nav-link {{ Request::is('core/user*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Users</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('role.index') }}"
-                        class="nav-link  {{ Request::is('core/role*') ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Roles & Permission</p>
-                    </a>
-                </li>
+                @if (in_array('user', $permissionAccess->toArray()))
+                    <li class="nav-item">
+                        <a href="{{ route('user.index') }}"
+                            class="nav-link {{ Request::is('core/user*') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                @endif
+                @if (in_array('role', $permissionAccess->toArray()))
+                    <li class="nav-item">
+                        <a href="{{ route('role.index') }}"
+                            class="nav-link  {{ Request::is('core/role*') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Roles & Permission</p>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </li>
         <li class="nav-item">

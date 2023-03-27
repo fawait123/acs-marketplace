@@ -9,8 +9,8 @@
             <form action="{{ route('action.login') }}" method="post">
                 @csrf
                 <div class="input-group mb-3">
-                    <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
-                        placeholder="Username or Email">
+                    <input type="text" value="{{ old('username') }}" name="username"
+                        class="form-control @error('username') is-invalid @enderror" placeholder="Username or Email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
