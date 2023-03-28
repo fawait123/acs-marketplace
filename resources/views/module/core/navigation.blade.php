@@ -35,7 +35,7 @@
                 class="nav-link {{ Request::is('core/market*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
-                    Market
+                    Merchant
                     <span class="right badge badge-danger">New</span>
                 </p>
             </a>
