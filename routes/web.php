@@ -44,6 +44,10 @@ Route::group(['prefix'=>'notification','middleware'=>'auth'],function(){
 });
 
 // ======================== market    =========================
-Route::group(['prefix'=>'market'],function(){
+Route::group(['prefix'=>'market','middleware'=>'market'],function(){
     Route::get('/',[MarketController::class,'index'])->name('market.index');
+});
+Route::group(['prefix'=>'market'],function(){
+    Route::get('register',[MarketController::class,'register'])->name('market.register');
+    Route::post('register',[MarketController::class,'actionRegister'])->name('market.register.action');
 });
