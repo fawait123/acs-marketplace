@@ -10,8 +10,16 @@
     border-radius:20px;
     display:flex;
     justify-content:center;
+    flex-direction: column;
     align-items:center;
     cursor: pointer;
+}
+
+.card-title-custom{
+    color: white;
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: 600;
 }
 
 .icons:hover{
@@ -51,7 +59,7 @@
         transform: scale(1.0);
     }
     to {
-        transform: scale(2.0);
+        transform: scale(1.5);
     }
 }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Market\MarketController;
 use App\Http\Controllers\Core\RoleController;
+use App\Http\Controllers\Core\MarketController as AdminMarketController;
 use App\Helpers\Socket;
 
 Route::get('/', function () {
@@ -34,6 +35,10 @@ Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
     Route::get('role/permission',[RoleController::class,'permissionSync'])->name('role.permission.sync')->middleware('permission:role');
     Route::resource('user',UserController::class)->middleware('permission:user');
     Route::resource('role',RoleController::class)->middleware('permission:role');
+    Route::get('market',[AdminMarketController::class,'index'])->name('core.market.index');
+    Route::get('market/json',[AdminMarketController::class,'json'])->name('core.market.json');
+    Route::post('market/status/{market}',[AdminMarketController::class,'status'])->name('core.market.status');
+    Route::get('market/show/{market}',[AdminMarketController::class,'show'])->name('core.market.show');
 });
 
 // ======================== notification    =========================
@@ -44,6 +49,10 @@ Route::group(['prefix'=>'notification','middleware'=>'auth'],function(){
 });
 
 // ======================== market    =========================
-Route::group(['prefix'=>'market'],function(){
+Route::group(['prefix'=>'market','middleware'=>'market'],function(){
     Route::get('/',[MarketController::class,'index'])->name('market.index');
+});
+Route::group(['prefix'=>'market','middleware'=>'auth'],function(){
+    Route::get('register',[MarketController::class,'register'])->name('market.register');
+    Route::post('register',[MarketController::class,'actionRegister'])->name('market.register.action');
 });

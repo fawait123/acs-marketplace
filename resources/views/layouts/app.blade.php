@@ -25,6 +25,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assets') }}/dist/css/adminlte.min.css">
+    <!-- BS Stepper -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/plugins/bs-stepper/css/bs-stepper.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
@@ -204,6 +206,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('assets') }}/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="{{ asset('assets') }}/dist/js/demo.js"></script>
+    <!-- BS-Stepper -->
+    <script src="{{ asset('assets') }}/plugins/bs-stepper/js/bs-stepper.min.js"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     @stack('customjs')
     {{-- toastr message --}}

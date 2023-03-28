@@ -1,6 +1,6 @@
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item menu-open">
+        <li class="nav-item {{ Request::is('core/user*') || Request::is('core/role*') ? 'menu-open' : '' }}">
             <a href="#"
                 class="nav-link {{ Request::is('core/user*') || Request::is('core/role*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -31,10 +31,11 @@
             </ul>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{ route('core.market.index') }}"
+                class="nav-link {{ Request::is('core/market*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
-                    Market
+                    Merchant
                     <span class="right badge badge-danger">New</span>
                 </p>
             </a>

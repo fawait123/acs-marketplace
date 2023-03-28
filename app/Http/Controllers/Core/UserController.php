@@ -44,7 +44,8 @@ class UserController extends Controller
             'email'=>'required|email:dns|unique:users,email',
             'username'=>'required|unique:users,username',
             'password'=>'required|min:8',
-            'role'=>'required'
+            'role'=>'required',
+            'is_active'=>'required'
         ]);
 
 
@@ -54,6 +55,7 @@ class UserController extends Controller
             'username'=>$request->username,
             'password'=>Hash::make($request->password),
             'role'=>$request->role,
+            'is_active'=>$request->is_active
         ]);
 
         $user->assignRole($request->role);
@@ -103,7 +105,8 @@ class UserController extends Controller
             'name'=>'required',
             'email'=>'required|email:dns|unique:users,email,'.$id,
             'username'=>'required|unique:users,username,'.$id,
-            'role'=>'required'
+            'role'=>'required',
+            'is_active'=>'required'
         ]);
         $user = User::find($id);
         $password = $user->password;
@@ -117,6 +120,7 @@ class UserController extends Controller
             'username'=>$request->username,
             'password'=>$password,
             'role'=>$request->role,
+            'is_active'=>$request->is_active
         ]);
 
         $user->syncRoles([$request->role]);
