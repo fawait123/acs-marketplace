@@ -57,6 +57,21 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="id_active">Status Account</label>
+                        <select name="id_active" id="id_active"
+                            class="form-control @error('id_active') is-invalid @enderror">
+                            <option value="">select</option>
+                            <option value="1" {{ isset($id) ? ($user->is_active == 1 ? 'selected' : '') : '' }}>Active
+                            </option>
+                            <option value="0" {{ isset($id) ? ($user->is_active == 0 ? 'selected' : '') : '' }}>
+                                Inactive
+                            </option>
+                        </select>
+                        @error('id_active')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-sm">Save &nbsp;&nbsp;<i
                                 class="fa fa-save"></i></button>
                     </div>

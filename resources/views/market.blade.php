@@ -199,10 +199,7 @@
             </div>
             <div class="col-12">
                 <!-- About Me Box -->
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Owner Info</h3>
-                    </div>
+                <div class="card card-primary card-outline">
                     <!-- /.card-header -->
                     <div class="card-body box-profile">
                         <div class="text-center">
