@@ -12,7 +12,8 @@ class MarketController extends Controller
 {
     public function index()
     {
-        return view('module.market.market.index');
+        $market = Market::find(auth()->user()->id);
+        return view('module.market.market.index',compact('market'));
     }
 
     public function register()

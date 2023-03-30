@@ -29,6 +29,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('splide/dist/css/splide.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dropify/dist/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
@@ -238,6 +240,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('assets') }}/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <!-- bs-custom-file-input -->
     <script src="{{ asset('assets') }}/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="{{ asset('splide/dist/js/splide.min.js') }}"></script>
+    <script src="{{ asset('dropify/dist/js/dropify.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     @stack('customjs')
     <script>

@@ -97,9 +97,10 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Type $type)
     {
-        //
+        $type->delete();
+        return redirect()->route('type.index')->with(['message'=>'Data deleted successfully']);
     }
 
     public function json(Request $request)
@@ -142,7 +143,7 @@ class TypeController extends Controller
                                     class='text-danger'><i class='fa fa-trash'></i></a>";
             $data[] = $nestedData;
         }
-    }
+        }
 
 
         $json_data = array(
