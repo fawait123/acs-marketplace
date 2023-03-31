@@ -131,9 +131,65 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Asset $asset)
     {
-        //
+        $picture = $asset->picture == null ? 'required|' : '';
+        $rules = [
+            'name'=>'required',
+            'machine_id'=>'required',
+            'type_id'=>'required',
+            'color'=>'required',
+            'km'=>'required',
+            'year'=>'required|numeric',
+            'stok'=>'required|numeric',
+            'price'=>'required',
+            'description'=>'required',
+            'picture'=>$picture.'mimes:png,jpg,jpeg,jfif,svg|max:5120',
+            'asset.*'=>'mimes:png,jpg,jpeg,jfif,svg|max:5120',
+        ];
+
+        $request->validate($rules);
+
+        // find market id
+        $market = Market::where('owner_id',auth()->user()->id)->first();
+
+        $picture_name = $asset->picture;
+
+        if($request->hasFile('picture')){
+            $filePicture = $request->file('picture');
+            $picture_name = time().$filePicture->getClientOriginalName();
+            $filePicture->move('uploads/asset',$picture_name);
+        }
+
+        $asset->update([
+            'name'=>$request->name,
+            'color'=>$request->color,
+            'year'=>$request->year,
+            'price'=>join('',explode(',',$request->price)),
+            'km'=>$request->km,
+            'stok'=>$request->stok,
+            'description'=>$request->description,
+            'machine_id'=>$request->machine_id,
+            'type_id'=>$request->type_id,
+            'market_id'=>$market->id,
+            'picture'=>'uploads/asset/'.$picture_name,
+        ]);
+
+        // jika ada file tambahan
+        if($request->hasFile('asset')){
+            $assetFile = $request->file('asset');
+            for ($i=0; $i < count($assetFile); $i++) {
+                $asset_name = time().$assetFile[$i]->getClientOriginalName();
+                $assetFile[$i]->move('uploads/asset',$asset_name);
+
+                DetailAsset::create([
+                    'picture'=>'uploads/asset/'.$asset_name,
+                    'asset_id'=>$asset->id
+                ]);
+            }
+        }
+
+        return redirect()->route('asset.index')->with(['message'=>'Data updated successfully']);
     }
 
     /**
@@ -210,9 +266,21 @@ class AssetController extends Controller
     public function removeImage(Request $request)
     {
         if($request->filled('id')){
+            if($request->source == 'Asset'){
+                unlink($request->uri);
+                Asset::where('id',$request->id)->update([
+                    'picture'=>null
+                ]);
 
+                return 'success';
+            }else{
+                unlink($request->uri);
+                DetailAsset::where('id',$request->id)->delete();
+
+                return 'success';
+            }
         }
 
-        return 'tidak oke';
+        return 'no action';
     }
 }

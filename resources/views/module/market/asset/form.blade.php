@@ -103,9 +103,9 @@
                     </div>
                     <div class="form-group">
                         <input type="file" name="picture"
-                            data-default-file="{{ isset($id) ? asset($asset->picture) : '' }}"
+                            data-default-file="{{ isset($id) ? ($asset->picture == null ? '' : asset($asset->picture)) : '' }}"
                             data-id="{{ isset($id) ? $asset->id : '' }}"
-                            data-uri="{{ isset($id) ? $asset->picture : '' }}"
+                            data-uri="{{ isset($id) ? $asset->picture : '' }}" data-source="Asset"
                             data-allowed-file-extensions="png jpg jpeg jfif svg" class="form-control" id="picture">
                     </div>
                     <div class="row">
@@ -119,7 +119,8 @@
                                     <input type="file" name="asset[]"
                                         data-id="{{ isset($id) ? $asset->details[$i]->id : '' }}"
                                         data-uri="{{ isset($id) ? $asset->details[$i]->picture : '' }}"
-                                        data-default-file="{{ isset($id) ? asset($asset->details[$i]->picture) : '' }}"
+                                        data-source="DetailAsset"
+                                        data-default-file="{{ isset($id) ? ($asset->details[$i]->picture == null ? '' : asset($asset->details[$i]->picture)) : '' }}"
                                         data-allowed-file-extensions="png jpg jpeg jfif svg" class="form-control dropify"
                                         id="picture">
                                 </div>
@@ -167,12 +168,14 @@
                     let target = element.element
                     let id = $(target).data('id')
                     let uri = $(target).data('uri')
+                    let source = $(target).data('source')
                     $.ajax({
                         url: '{{ route('asset.remove.image') }}',
                         type: 'get',
                         data: {
                             id: id,
-                            uri: uri
+                            uri: uri,
+                            source: source
                         },
                         success: function(res) {
                             console.log(res)
@@ -193,13 +196,29 @@
             });
 
             drAsset.on('dropify.errors', function(event, element) {
-                console.log(event)
-                console.log(element)
                 alert('Has Errors!');
             });
 
             drAsset.on('dropify.beforeClear', function(event, element) {
-                return confirm("Do you really want to delete \"" + element.filename + "\" ?");
+                let isTrue = confirm("Do you really want to delete \"" + element.filename + "\" ?");
+                if (isTrue) {
+                    let target = element.element
+                    let id = $(target).data('id')
+                    let uri = $(target).data('uri')
+                    let source = $(target).data('source')
+                    $.ajax({
+                        url: '{{ route('asset.remove.image') }}',
+                        type: 'get',
+                        data: {
+                            id: id,
+                            uri: uri,
+                            source: source
+                        },
+                        success: function(res) {
+                            console.log(res)
+                        }
+                    })
+                }
             });
 
 
