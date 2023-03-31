@@ -15,7 +15,11 @@
                             <tr>
                                 <th>NO</th>
                                 <th>Name</th>
-                                <th>Created By</th>
+                                <th>Machine</th>
+                                <th>Type</th>
+                                <th>Color</th>
+                                <th>Price</th>
+                                <th>Year</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -49,7 +53,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('type.json') }}",
+                    url: "{{ route('asset.json') }}",
                     dataType: "json",
                     type: "GET",
                 },
@@ -59,7 +63,19 @@
                         data: "name"
                     },
                     {
-                        data: "created_by"
+                        data: "machine"
+                    },
+                    {
+                        data: "type"
+                    },
+                    {
+                        data: "color"
+                    },
+                    {
+                        data: "price"
+                    },
+                    {
+                        data: "year"
                     },
                     {
                         data: "options"

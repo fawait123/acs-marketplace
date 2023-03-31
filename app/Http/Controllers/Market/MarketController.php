@@ -12,7 +12,7 @@ class MarketController extends Controller
 {
     public function index()
     {
-        $market = Market::find(auth()->user()->id);
+        $market = Market::with(['assets.details','assets.machine','assets.type'])->find(auth()->user()->id);
         return view('module.market.market.index',compact('market'));
     }
 

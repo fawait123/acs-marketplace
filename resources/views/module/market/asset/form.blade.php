@@ -4,7 +4,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <form action="{{ isset($id) ? route('asset.update', $id) : route('asset.store') }}" method="post">
+                <form action="{{ isset($id) ? route('asset.update', $id) : route('asset.store') }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     @if (isset($id))
                         @method('put')
@@ -48,8 +49,13 @@
                     </div>
                     <div class="form-group">
                         <label for="color">Color</label>
-                        <input type="text" class="form-control @error('color') is-invalid @enderror" placeholder="Color"
-                            name="color" value="{{ isset($id) ? $asset->color : old('color') }}">
+                        <div class="input-group my-colorpicker2">
+                            <input type="text" class="form-control @error('color') is-invalid @enderror"
+                                placeholder="Color" name="color" value="{{ isset($id) ? $asset->color : old('color') }}">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-square"></i></span>
+                            </div>
+                        </div>
                         @error('color')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -80,8 +86,8 @@
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="text" class="form-control @error('price') is-invalid @enderror" placeholder="price"
-                            name="price" value="{{ isset($id) ? $asset->price : old('price') }}">
+                        <input type="text" id="price" class="form-control @error('price') is-invalid @enderror"
+                            placeholder="price" name="price" value="{{ isset($id) ? $asset->price : old('price') }}">
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -95,8 +101,8 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <input type="file" name="picture" data-allowed-file-extensions="pdf png psd" class="form-control"
-                            id="picture">
+                        <input type="file" name="picture" data-allowed-file-extensions="png jpg jpeg jfif svg"
+                            class="form-control" id="picture">
                     </div>
                     <div class="row">
                         @php
@@ -105,8 +111,9 @@
                         @for ($i = 0; $i < $count; $i++)
                             <div class="col-6">
                                 <div class="form-group">
-                                    <input type="file" name="asset[]" data-allowed-file-extensions="pdf png psd"
-                                        class="form-control dropify" id="picture">
+                                    <input type="file" name="asset[]"
+                                        data-allowed-file-extensions="png jpg jpeg jfif svg" class="form-control dropify"
+                                        id="picture">
                                 </div>
                             </div>
                         @endfor
@@ -177,33 +184,50 @@
             // query string
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('count');
+
+            // color picker
+            $('.my-colorpicker2').colorpicker()
+            $('.my-colorpicker2').on('colorpickerChange', function(event) {
+                $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+            })
+
+            // Summernote
+            $('#description').summernote()
+
+            // auto numeric
+            new AutoNumeric(document.getElementById('price'), {
+                decimalPlaces: 0
+            });
+
         })
     </script>
 @endpush
 
+@error('picture')
+    @push('customjs')
+        <script>
+            $(document).ready(function() {
+                $("input[name=picture]").parent().addClass('has-error')
+                $("input[name=picture]").parent().find('.dropify-errors-container').html(`<ul>
+                    <li>{{ $message }}</li>
+                </ul>`)
+            })
+        </script>
+    @endpush
+@enderror
 
-
-
-{{-- <div class="dropify-wrapper has-error">
-    <div class="dropify-message"><span class="file-icon">
-            <p>Drag and drop a file here or click</p>
-        </span>
-        <p class="dropify-error">Ooops, something wrong appended.</p>
-    </div>
-    <div class="dropify-loader" style="display: none;"></div>
-    <div class="dropify-errors-container">
-        <ul>
-            <li>The file is not allowed (pdf, png, psd only).</li>
-        </ul>
-    </div><input type="file" name="picture" data-allowed-file-extensions="pdf png psd" class="form-control"
-        id="picture"><button type="button" class="dropify-clear">Remove</button>
-    <div class="dropify-preview" style="display: none;"><span class="dropify-render"></span>
-        <div class="dropify-infos">
-            <div class="dropify-infos-inner">
-                <p class="dropify-filename"><span class="file-icon"></span> <span
-                        class="dropify-filename-inner"></span></p>
-                <p class="dropify-infos-message">Drag and drop or click to replace</p>
-            </div>
-        </div>
-    </div>
-</div> --}}
+@for ($i = 0; $i < $count; $i++)
+    @if ($errors->has('asset.' . $i))
+        @push('customjs')
+            <script>
+                $(document).ready(function() {
+                    let element = $(".dropify")[{{ $i }}];
+                    $(element).parent().addClass('has-error')
+                    $(element).parent().find('.dropify-errors-container').html(`<ul>
+                    <li>{{ $errors->get('asset.' . $i)[0] }}</li>
+                </ul>`)
+                })
+            </script>
+        @endpush
+    @endif
+@endfor
