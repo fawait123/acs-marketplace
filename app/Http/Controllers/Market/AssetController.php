@@ -116,9 +116,12 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Asset $asset)
     {
-        //
+        $id = $asset->id;
+        $type = Type::all();
+        $machine = Machine::all();
+        return view('module.market.asset.form',compact('asset','id','type','machine'));
     }
 
     /**
@@ -202,5 +205,14 @@ class AssetController extends Controller
         );
 
         return json_encode($json_data);
+    }
+
+    public function removeImage(Request $request)
+    {
+        if($request->filled('id')){
+
+        }
+
+        return 'tidak oke';
     }
 }

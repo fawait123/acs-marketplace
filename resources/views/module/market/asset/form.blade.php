@@ -53,7 +53,8 @@
                             <input type="text" class="form-control @error('color') is-invalid @enderror"
                                 placeholder="Color" name="color" value="{{ isset($id) ? $asset->color : old('color') }}">
                             <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-square"></i></span>
+                                <span class="input-group-text"><i class="fas fa-square"
+                                        style="{{ isset($id) ? 'color:' . $asset->color : '' }}"></i></span>
                             </div>
                         </div>
                         @error('color')
@@ -95,23 +96,30 @@
                     <div class="form-group">
                         <label for="description">Description</label>
                         <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
-                            cols="30" rows="10"></textarea>
+                            cols="30" rows="10">{{ isset($id) ? $asset->description : old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="form-group">
-                        <input type="file" name="picture" data-allowed-file-extensions="png jpg jpeg jfif svg"
-                            class="form-control" id="picture">
+                        <input type="file" name="picture"
+                            data-default-file="{{ isset($id) ? asset($asset->picture) : '' }}"
+                            data-id="{{ isset($id) ? $asset->id : '' }}"
+                            data-uri="{{ isset($id) ? $asset->picture : '' }}"
+                            data-allowed-file-extensions="png jpg jpeg jfif svg" class="form-control" id="picture">
                     </div>
                     <div class="row">
                         @php
                             $count = isset($_GET['count']) ? $_GET['count'] : 2;
+                            $count = isset($id) ? count($asset->details) : $count;
                         @endphp
                         @for ($i = 0; $i < $count; $i++)
                             <div class="col-6">
                                 <div class="form-group">
                                     <input type="file" name="asset[]"
+                                        data-id="{{ isset($id) ? $asset->details[$i]->id : '' }}"
+                                        data-uri="{{ isset($id) ? $asset->details[$i]->picture : '' }}"
+                                        data-default-file="{{ isset($id) ? asset($asset->details[$i]->picture) : '' }}"
                                         data-allowed-file-extensions="png jpg jpeg jfif svg" class="form-control dropify"
                                         id="picture">
                                 </div>
@@ -153,9 +161,24 @@
                 console.log(element)
                 alert('Has Errors!');
             });
-
             drEvent.on('dropify.beforeClear', function(event, element) {
-                return confirm("Do you really want to delete \"" + element.filename + "\" ?");
+                let isTrue = confirm("Do you really want to delete \"" + element.filename + "\" ?");
+                if (isTrue) {
+                    let target = element.element
+                    let id = $(target).data('id')
+                    let uri = $(target).data('uri')
+                    $.ajax({
+                        url: '{{ route('asset.remove.image') }}',
+                        type: 'get',
+                        data: {
+                            id: id,
+                            uri: uri
+                        },
+                        success: function(res) {
+                            console.log(res)
+                        }
+                    })
+                }
             });
 
             let drAsset = $(".dropify").dropify({
