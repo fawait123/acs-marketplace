@@ -267,14 +267,18 @@ class AssetController extends Controller
     {
         if($request->filled('id')){
             if($request->source == 'Asset'){
-                unlink($request->uri);
+                if(file_exists($request->uri)){
+                    unlink($request->uri);
+                }
                 Asset::where('id',$request->id)->update([
                     'picture'=>null
                 ]);
 
                 return 'success';
             }else{
-                unlink($request->uri);
+                if(file_exists($request->uri)){
+                    unlink($request->uri);
+                }
                 DetailAsset::where('id',$request->id)->delete();
 
                 return 'success';

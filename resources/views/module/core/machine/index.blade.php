@@ -15,6 +15,7 @@
                             <tr>
                                 <th>NO</th>
                                 <th>Name</th>
+                                <th>Picture</th>
                                 <th>Created By</th>
                                 <th>Action</th>
                             </tr>
@@ -57,6 +58,9 @@
                         data: "no"
                     }, {
                         data: "name"
+                    },
+                    {
+                        data: "picture"
                     },
                     {
                         data: "created_by"

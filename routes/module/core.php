@@ -24,6 +24,7 @@ Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
 
 // route master data
 Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
+    Route::get('machine/removeImage',[MachineController::class,'removeImage'])->name('machine.remove.image');
     Route::get('type/json',[TypeController::class,'json'])->name('type.json')->middleware('permission:type');
     Route::get('machine/json',[MachineController::class,'json'])->name('machine.json')->middleware('permission:machine');
     Route::resource('type',TypeController::class)->middleware('permission:type');

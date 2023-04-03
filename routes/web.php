@@ -4,11 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WelcomeController;
 use App\Helpers\Socket;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [WelcomeController::class,'index'])->name('welcome');
 
 // ======================== AUTH    =========================
 Route::group(['prefix'=>'auth'],function(){
