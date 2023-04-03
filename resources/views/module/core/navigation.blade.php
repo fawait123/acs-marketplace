@@ -40,5 +40,35 @@
                 </p>
             </a>
         </li>
+        <li class="nav-item {{ Request::is('core/type*') || Request::is('core/machine*') ? 'menu-open' : '' }}">
+            <a href="#"
+                class="nav-link {{ Request::is('core/type*') || Request::is('core/machine*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-database"></i>
+                <p>
+                    Master Data
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                @if (in_array('type', $permissionAccess->toArray()))
+                    <li class="nav-item">
+                        <a href="{{ route('type.index') }}"
+                            class="nav-link {{ Request::is('core/type*') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Type</p>
+                        </a>
+                    </li>
+                @endif
+                @if (in_array('type', $permissionAccess->toArray()))
+                    <li class="nav-item">
+                        <a href="{{ route('machine.index') }}"
+                            class="nav-link {{ Request::is('core/machine*') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Machine</p>
+                        </a>
+                    </li>
+                @endif
+            </ul>
+        </li>
     </ul>
 </nav>

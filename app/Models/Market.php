@@ -15,4 +15,9 @@ class Market extends Model
     {
         return $this->belongsTo(Owner::class,'owner_id');
     }
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class,'market_id');
+    }
 }

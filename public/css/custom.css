@@ -15,6 +15,13 @@
     cursor: pointer;
 }
 
+.card-color{
+    width: 30px;
+    height: 30px;
+    background-color: blue;
+    border-radius: 50%;
+}
+
 .card-title-custom{
     color: white;
     margin-top: 20px;
