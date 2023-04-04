@@ -59,4 +59,30 @@ class CustomerAuthController extends Controller
 
         return redirect()->route('customer.auth.login')->withErrors(['username'=>'Register successfully']);
     }
+
+    public function actionLogin(Request $request)
+    {
+        $request->validate([
+            'username'=>'required',
+            'password'=>'required'
+        ]);
+
+        $check = Customer::where('username',$request->username)->orWhere('email',$request->username)->first();
+        if(!$check){
+            return redirect()->back()->withInput()->withErrors(['username'=>'The credentials doesnt match to our record']);
+        }
+
+        if(!Hash::check($request->password,$check->password)){
+            return redirect()->back()->withInput()->withErrors(['username'=>'The credentials doesnt match to our record']);
+        }
+
+        if($check->is_active ==0){
+            return redirect()->back()->withInput()->withErrors(['username'=>'This account is non active']);
+        }
+
+
+        auth('customer')->login($check,$request->remember ? true : false);
+
+        return redirect()->route('welcome');
+    }
 }

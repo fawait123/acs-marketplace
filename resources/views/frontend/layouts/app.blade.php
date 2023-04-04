@@ -64,6 +64,7 @@
                                 class="nav-item  {{ Request::is('products') || Request::is('product*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('frontend.product.index') }}">Product</a>
                             </li>
+
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">Shop</a>
@@ -80,12 +81,15 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
+                            @if (auth('customer')->user())
+                                <li class="nav-item"><a href="#" class="cart"><span class="lnr lnr-exit"></span>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="nav-item"><a href="#" class="cart"><span class="ti-user"></span></a>
+                                </li>
+                            @endif
                             <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a>
-                            </li>
-                            <li class="nav-item"><a href="#" class="cart"><span class="ti-user"></span></a>
-                            </li>
-                            <li class="nav-item"><a href="#" class="cart"><span
-                                        class="lnr lnr-exit"></span></a>
                             </li>
                             <li class="nav-item">
                                 <button class="search"><span class="lnr lnr-magnifier"
