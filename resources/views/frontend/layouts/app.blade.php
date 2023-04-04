@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/magnific-popup.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/main.css">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
 <body>
@@ -54,8 +55,9 @@
                         <ul class="nav navbar-nav menu_nav ml-auto">
                             <li class="nav-item {{ Request::is('/') ? 'active' : '' }}"><a class="nav-link"
                                     href="{{ route('welcome') }}">Home</a></li>
-                            <li class="nav-item  {{ Request::is('products') ? 'active' : '' }}"><a class="nav-link"
-                                    href="{{ route('frontend.product.index') }}">Product</a>
+                            <li
+                                class="nav-item  {{ Request::is('products') || Request::is('product*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('frontend.product.index') }}">Product</a>
                             </li>
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"

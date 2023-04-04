@@ -11,7 +11,7 @@
                         <div class="row single-slide align-items-center d-flex">
                             <div class="col-lg-5 col-md-6">
                                 <div class="banner-content">
-                                    <h1>Nike New <br>Collection!</h1>
+                                    <h1>Pajero Sport <br>Collection!</h1>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et
                                         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
@@ -19,8 +19,7 @@
                             </div>
                             <div class="col-lg-7">
                                 <div class="banner-img">
-                                    <img class="img-fluid" src="{{ asset('frontend') }}/img/banner/banner-img.png"
-                                        alt="">
+                                    <img class="img-fluid" src="{{ asset('img/bg1.png') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -28,7 +27,7 @@
                         <div class="row single-slide">
                             <div class="col-lg-5">
                                 <div class="banner-content">
-                                    <h1>Nike New <br>Collection!</h1>
+                                    <h1>Honda Civic <br>Collection!</h1>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                                         incididunt ut labore et
                                         dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
@@ -36,8 +35,7 @@
                             </div>
                             <div class="col-lg-7">
                                 <div class="banner-img">
-                                    <img class="img-fluid" src="{{ asset('frontend') }}/img/banner/banner-img.png"
-                                        alt="">
+                                    <img class="img-fluid" src="{{ asset('img/bg2.png') }}" alt="">
                                 </div>
                             </div>
                         </div>
@@ -210,7 +208,7 @@
                                             <span class="lnr lnr-sync"></span>
                                             <p class="hover-text">compare</p>
                                         </a>
-                                        <a href="" class="social-info">
+                                        <a href="{{ route('frontend.product.show', $item->id) }}" class="social-info">
                                             <span class="lnr lnr-move"></span>
                                             <p class="hover-text">view more</p>
                                         </a>
@@ -356,7 +354,7 @@
         <div class="container">
             <div class="row">
                 @foreach ($machines as $item)
-                    <a class="col single-img" href="#">
+                    <a class="col single-img" href="{{ route('frontend.categories', $item->name) }}">
                         <img class="img-fluid d-block mx-auto" style="width: 80px;" src="{{ asset($item->picture) }}"
                             alt="">
                     </a>

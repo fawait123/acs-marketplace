@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 text-center">
                 <div class="section-title">
-                    <h1>Deals of the Week</h1>
+                    <h1>Other Products</h1>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore
                         magna aliqua.</p>
@@ -16,7 +16,7 @@
                     @foreach ($assetRandom as $item)
                         <div class="col-lg-4 col-md-4 col-sm-6 mb-20">
                             <div class="single-related-product d-flex">
-                                <a href="#">
+                                <a href="{{ route('frontend.product.show', $item->id) }}">
                                     <div
                                         style="width: 60px;height: 60px; border-radius: 5px;background: black; overflow: hidden;background-size: contain;">
                                         <img src="{{ asset($item->picture) }}" alt=""

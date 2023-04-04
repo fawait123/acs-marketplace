@@ -26,12 +26,20 @@ class WelcomeController extends Controller
 
     public function product($id)
     {
-        $product = Asset::with(['details','type','machine'])->find($id);
+        $product = Asset::with(['details','type','machine','market'])->find($id);
         if($product){
             $assetRandom = Asset::inRandomOrder()->take(9)->get();
             return view('frontend.product',compact('assetRandom','product'));
         }
 
         return abort(404);
+    }
+
+    public function categories($category)
+    {
+        $products = Asset::whereHas('machine',function($qr)use($category){
+            $qr->where('name',$category);
+        })->get();
+        return view('frontend.categories',compact('products'));
     }
 }

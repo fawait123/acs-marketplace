@@ -71,66 +71,58 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <h5>Width</h5>
+                                        <h5>Color</h5>
                                     </td>
                                     <td>
-                                        <h5>128mm</h5>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5>Height</h5>
-                                    </td>
-                                    <td>
-                                        <h5>508mm</h5>
+                                        <div class="card-color" style="background: {{ $product->color }}"></div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h5>Depth</h5>
+                                        <h5>Year</h5>
                                     </td>
                                     <td>
-                                        <h5>85mm</h5>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5>Weight</h5>
-                                    </td>
-                                    <td>
-                                        <h5>52gm</h5>
+                                        <h5>{{ $product->year }}</h5>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h5>Quality checking</h5>
+                                        <h5>Stok</h5>
                                     </td>
                                     <td>
-                                        <h5>yes</h5>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5>Freshness Duration</h5>
-                                    </td>
-                                    <td>
-                                        <h5>03days</h5>
+                                        <h5>{{ $product->stok }}</h5>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h5>When packeting</h5>
+                                        <h5>Type</h5>
                                     </td>
                                     <td>
-                                        <h5>Without touch of hand</h5>
+                                        <h5>{{ $product->type->name }}</h5>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <h5>Each Box contains</h5>
+                                        <h5>Machine</h5>
                                     </td>
                                     <td>
-                                        <h5>60pcs</h5>
+                                        <h5>{{ $product->machine->name }}</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Market</h5>
+                                    </td>
+                                    <td>
+                                        <h5>{{ $product->market->name }}</h5>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h5>Price</h5>
+                                    </td>
+                                    <td>
+                                        <h5>RP{{ number_format($product->price, 2, ',', '.') }}</h5>
                                     </td>
                                 </tr>
                             </tbody>

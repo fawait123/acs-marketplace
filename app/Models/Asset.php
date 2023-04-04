@@ -25,4 +25,9 @@ class Asset extends Model
     {
         return $this->belongsTo(Machine::class,'machine_id');
     }
+
+    public function market()
+    {
+        return $this->belongsTo(Market::class,'market_id');
+    }
 }
