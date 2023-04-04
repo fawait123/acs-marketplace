@@ -4,10 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\WelcomeController;
 use App\Helpers\Socket;
-
-Route::get('/', [WelcomeController::class,'index'])->name('welcome');
 
 // ======================== AUTH    =========================
 Route::group(['prefix'=>'auth'],function(){
@@ -39,3 +36,6 @@ require('module/core.php');
 
 // ======================== market    =========================
 require('module/market.php');
+
+// ======================== frontend    =========================
+require('frontend/web.php');
