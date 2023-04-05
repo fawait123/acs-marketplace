@@ -5,6 +5,7 @@ use App\Http\Controllers\Core\MarketController as AdminMarketController;
 use App\Http\Controllers\Core\UserController;
 use App\Http\Controllers\Core\TypeController;
 use App\Http\Controllers\Core\MachineController;
+use App\Http\Controllers\Core\CustomerController;
 
 // route setting
 Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
@@ -27,6 +28,10 @@ Route::group(['prefix'=>'core','middleware'=>'auth'],function(){
     Route::get('machine/removeImage',[MachineController::class,'removeImage'])->name('machine.remove.image');
     Route::get('type/json',[TypeController::class,'json'])->name('type.json')->middleware('permission:type');
     Route::get('machine/json',[MachineController::class,'json'])->name('machine.json')->middleware('permission:machine');
+    Route::get('customer/json',[CustomerController::class,'json'])->name('customer.json')->middleware('permission:customer');
+    Route::post('customer/status/{customer}',[CustomerController::class,'status'])->name('customer.status')->middleware('permission:customer');
+    Route::get('customer/remove-image',[CustomerController::class,'removeImage'])->name('customer.remove.image')->middleware('permission:customer');
     Route::resource('type',TypeController::class)->middleware('permission:type');
     Route::resource('machine',MachineController::class)->middleware('permission:machine');
+    Route::resource('customer',CustomerController::class)->middleware('permission:customer');
 });

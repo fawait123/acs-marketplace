@@ -51,8 +51,8 @@ class CustomerAuthController extends Controller
             'username'=>$request->username,
             'password'=>Hash::make($request->password),
             'telp'=>$request->telp,
-            'ktp'=>$ktp_name,
-            'picture'=>$picture_name,
+            'ktp'=>'upload/ktp/'.$ktp_name,
+            'picture'=>'upload/ktp/'.$picture_name,
             'is_active'=>0,
             'gender'=>$request->gender
         ]);
