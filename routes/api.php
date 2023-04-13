@@ -31,3 +31,8 @@ Route::group(['middleware'=>'authapi:api'],function(){
     Route::get('products',[ResourceController::class,'products']);
     Route::get('notifications',[ResourceController::class,'notifications']);
 });
+
+Route::group(['middleware'=>'authapi:api','prefix'=>'auth'],function(){
+    Route::get('me',[AuthController::class,'me']);
+    Route::post('logout',[AuthController::class,'logout']);
+});
