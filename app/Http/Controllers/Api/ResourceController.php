@@ -23,13 +23,13 @@ class ResourceController extends Controller
                     'data'=>[
                         'results'=>$categories
                     ]
-                ],200);
+                ]);
             }catch(Exception $error){
                 return response()->json([
                     'status'=>500,
                     'message'=>$error->getMessage(),
                     'data'=>[]
-                ],500);
+                ]);
             }
     }
 
@@ -43,13 +43,13 @@ class ResourceController extends Controller
                 'data'=>[
                     'results'=>$types
                 ]
-            ],200);
+            ]);
         }catch(Exception $error){
             return response()->json([
                 'status'=>500,
                 'message'=>$error->getMessage(),
                 'data'=>[]
-            ],500);
+            ]);
         }
     }
 
@@ -88,7 +88,7 @@ class ResourceController extends Controller
                 'status'=>500,
                 'message'=>$error->getMessage(),
                 'data'=>[]
-            ],500);
+            ]);
         }
     }
 
@@ -136,7 +136,7 @@ class ResourceController extends Controller
                 'status'=>500,
                 'message'=>$error->getMessage(),
                 'data'=>[]
-            ],500);
+            ]);
         }
     }
 }

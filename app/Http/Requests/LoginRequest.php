@@ -37,6 +37,6 @@ class LoginRequest extends FormRequest
             'status'   => 400,
             'message'   => 'Validation errors',
             'data'      => $validator->errors()
-        ],400));
+        ]));
     }
 }
