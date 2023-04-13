@@ -43,7 +43,11 @@ return [
         'customer'=>[
             'driver' => 'session',
             'provider' => 'customers',
-        ]
+        ],
+        'api' => [
+            'driver' => 'passport', //update this line
+            'provider' => 'users',
+        ],
     ],
 
     /*
