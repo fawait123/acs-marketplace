@@ -40,9 +40,10 @@
                 </p>
             </a>
         </li>
-        <li class="nav-item {{ Request::is('core/type*') || Request::is('core/machine*') ? 'menu-open' : '' }}">
+        <li
+            class="nav-item {{ Request::is('core/type*') || Request::is('core/machine*') || Request::is('core/customer*') ? 'menu-open' : '' }}">
             <a href="#"
-                class="nav-link {{ Request::is('core/type*') || Request::is('core/machine*') ? 'active' : '' }}">
+                class="nav-link {{ Request::is('core/type*') || Request::is('core/machine*') || Request::is('core/customer*') ? 'active' : '' }}">
                 <i class="nav-icon fas fa-database"></i>
                 <p>
                     Master Data
@@ -65,6 +66,15 @@
                             class="nav-link {{ Request::is('core/machine*') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Machine</p>
+                        </a>
+                    </li>
+                @endif
+                @if (in_array('customer', $permissionAccess->toArray()))
+                    <li class="nav-item">
+                        <a href="{{ route('customer.index') }}"
+                            class="nav-link {{ Request::is('core/customer*') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Customer</p>
                         </a>
                     </li>
                 @endif

@@ -4,8 +4,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerAuthController;
 use App\Helpers\Socket;
 
+
+Route::group(['prefix'=>'customer'],function(){
+    Route::get('auth/login',[CustomerAuthController::class,'login'])->name('customer.auth.login');
+    Route::get('auth/register',[CustomerAuthController::class,'register'])->name('customer.auth.register');
+    Route::post('auth/register',[CustomerAuthController::class,'actionRegister'])->name('customer.auth.register.action');
+    Route::post('auth/login',[CustomerAuthController::class,'actionLogin'])->name('customer.auth.login.action');
+});
 // ======================== AUTH    =========================
 Route::group(['prefix'=>'auth'],function(){
     Route::get('login',[AuthController::class,'login'])->name('login');

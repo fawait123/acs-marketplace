@@ -15,4 +15,9 @@ class Machine extends Model
     {
         return $this->belongsTo(User::class,'created_by');
     }
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class,'machine_id');
+    }
 }

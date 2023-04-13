@@ -1,3 +1,7 @@
+@php
+    $path = Request::path();
+    $path = explode('/', $path);
+@endphp
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -15,7 +19,7 @@
     <!-- meta character set -->
     <meta charset="UTF-8">
     <!-- Site Title -->
-    <title>Karma Shop</title>
+    <title>Online Shop | {{ ucfirst(end($path)) }}</title>
     <!--
   CSS
   ============================================= -->
@@ -30,6 +34,7 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/ion.rangeSlider.skinFlat.css" />
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/magnific-popup.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/css/main.css">
+    <link rel="stylesheet" href="{{ asset('dropify/dist/css/dropify.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
@@ -59,6 +64,7 @@
                                 class="nav-item  {{ Request::is('products') || Request::is('product*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('frontend.product.index') }}">Product</a>
                             </li>
+
                             <li class="nav-item submenu dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
                                     aria-haspopup="true" aria-expanded="false">Shop</a>
@@ -75,10 +81,19 @@
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
+                            @if (auth('customer')->user())
+                                <li class="nav-item"><a href="#" class="cart"><span class="lnr lnr-exit"></span>
+                                    </a>
+                                </li>
+                            @else
+                                <li class="nav-item"><a href="#" class="cart"><span class="ti-user"></span></a>
+                                </li>
+                            @endif
                             <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a>
                             </li>
                             <li class="nav-item">
-                                <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
+                                <button class="search"><span class="lnr lnr-magnifier"
+                                        id="search"></span></button>
                             </li>
                         </ul>
                     </div>
@@ -189,11 +204,9 @@
         </div>
     </footer>
     <!-- End footer Area -->
-
     <script src="{{ asset('frontend') }}/js/vendor/jquery-2.2.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.{{ asset('frontend') }}/js/1.11.0/umd/popper.min.js"
-        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
-    </script>
+    <script src="{{ asset('dropify/dist/js/dropify.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="{{ asset('frontend') }}/js/vendor/bootstrap.min.js"></script>
     <script src="{{ asset('frontend') }}/js/jquery.ajaxchimp.min.js"></script>
     <script src="{{ asset('frontend') }}/js/jquery.nice-select.min.js"></script>
@@ -206,21 +219,22 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
     <script src="{{ asset('frontend') }}/js/gmaps.min.js"></script>
     <script src="{{ asset('frontend') }}/js/main.js"></script>
+    @stack('customjs')
     <script>
-        const websocket = new WebSocket("ws://localhost:8080");
-        websocket.onopen = function(event) {
-            console.log('open', event)
-        }
-        websocket.onmessage = function(event) {
-            console.log('message', event)
-        };
+        // const websocket = new WebSocket("ws://localhost:8080");
+        // websocket.onopen = function(event) {
+        //     console.log('open', event)
+        // }
+        // websocket.onmessage = function(event) {
+        //     console.log('message', event)
+        // };
 
-        websocket.onerror = function(event) {
-            console.log('error', event)
-        };
-        websocket.onclose = function(event) {
-            console.log('close', event)
-        };
+        // websocket.onerror = function(event) {
+        //     console.log('error', event)
+        // };
+        // websocket.onclose = function(event) {
+        //     console.log('close', event)
+        // };
     </script>
     <script>
         $(".owl-prev").addClass('d-none')

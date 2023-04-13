@@ -198,15 +198,7 @@
 
                                         <a href="" class="social-info">
                                             <span class="ti-bag"></span>
-                                            <p class="hover-text">add to bag</p>
-                                        </a>
-                                        <a href="" class="social-info">
-                                            <span class="lnr lnr-heart"></span>
-                                            <p class="hover-text">Wishlist</p>
-                                        </a>
-                                        <a href="" class="social-info">
-                                            <span class="lnr lnr-sync"></span>
-                                            <p class="hover-text">compare</p>
+                                            <p class="hover-text">process transaction</p>
                                         </a>
                                         <a href="{{ route('frontend.product.show', $item->id) }}" class="social-info">
                                             <span class="lnr lnr-move"></span>
