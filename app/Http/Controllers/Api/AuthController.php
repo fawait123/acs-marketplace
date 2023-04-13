@@ -16,11 +16,11 @@ class AuthController extends Controller
             $user = User::where('username',$request->username)->orWhere('email',$request->username)->first();
 
             if(!$user){
-                return response()->json([
+                return response([
                     'status'=>404,
                     'message'=>'The credentials dosnt match to our record',
                     'data'=>[]
-                ],404);
+                ]);
             }
 
             if(!Hash::check($request->password,$user->password)){
@@ -28,7 +28,7 @@ class AuthController extends Controller
                     'status'=>404,
                     'message'=>'The credentials dosnt match to our record',
                     'data'=>[]
-                ],404);
+                ]);
             }
 
             if($user->is_active ==0){
@@ -36,7 +36,7 @@ class AuthController extends Controller
                     'status'=>400,
                     'message'=>'The Account is non active',
                     'data'=>[]
-                ],400);
+                ]);
             }
 
             $token = $user->createToken('CarShop API Token')->accessToken;
@@ -47,12 +47,12 @@ class AuthController extends Controller
                 'data'=>[
                     'token'=>$token
                 ]
-            ],200);
+            ]);
         } catch (Exception $error) {
             return response()->json([
                 'status'=>500,
                 'message'=>$error->getMessage()
-            ],500);
+            ]);
         }
     }
 
@@ -62,7 +62,7 @@ class AuthController extends Controller
             'status'=>401,
             'message'=>'Anauthorized',
             'data'=>[]
-        ],401);
+        ]);
     }
 
     public function me(Request $request)
@@ -73,7 +73,7 @@ class AuthController extends Controller
             'data'=>[
                 'results'=>$request->user()
             ]
-        ],200);
+        ]);
     }
 
     public function logout(Request $request)
@@ -84,6 +84,6 @@ class AuthController extends Controller
             'status'=>200,
             'message'=>'logout success',
             'data'=>[]
-        ],200);
+        ]);
     }
 }

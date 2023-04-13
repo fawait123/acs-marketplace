@@ -21,18 +21,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('unauthenticate',[AuthController::class,'unauthenticate'])->name('unauthenticate');
-Route::group(['prefix'=>'auth'],function(){
+Route::group(['prefix'=>'auth','middleware'=>['cors', 'json.response']],function(){
     Route::post('login',[AuthController::class,'login']);
 });
 // machine
-Route::group(['middleware'=>'authapi:api'],function(){
+Route::group(['middleware'=>['authapi:api','cors', 'json.response']],function(){
     Route::get('categories',[ResourceController::class,'categories']);
     Route::get('types',[ResourceController::class,'types']);
     Route::get('products',[ResourceController::class,'products']);
     Route::get('notifications',[ResourceController::class,'notifications']);
 });
 
-Route::group(['middleware'=>'authapi:api','prefix'=>'auth'],function(){
+Route::group(['middleware'=>['authapi:api','cors', 'json.response'],'prefix'=>'auth'],function(){
     Route::get('me',[AuthController::class,'me']);
     Route::post('logout',[AuthController::class,'logout']);
 });
