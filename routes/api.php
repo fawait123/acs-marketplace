@@ -28,7 +28,7 @@ Route::group(['prefix'=>'auth','middleware'=>['cors', 'json.response']],function
 
 
 // machine
-Route::group(['middleware'=>['auth.api','cors', 'json.response']],function(){
+Route::group(['middleware'=>['authapi:api','cors', 'json.response']],function(){
     Route::get('categories',[ResourceController::class,'categories']);
     Route::get('types',[ResourceController::class,'types']);
     Route::get('products',[ResourceController::class,'products']);
