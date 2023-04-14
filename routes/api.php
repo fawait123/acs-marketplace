@@ -16,23 +16,29 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::get('unauthenticate',[AuthController::class,'unauthenticate'])->name('unauthenticate');
+Route::get('unauthenticate',[AuthController::class,'unauthenticate'])->name('unauthenticate')->middleware('cors')->middleware('json.response');
+
 Route::group(['prefix'=>'auth','middleware'=>['cors', 'json.response']],function(){
     Route::post('login',[AuthController::class,'login']);
 });
+
+
 // machine
-Route::group(['middleware'=>['authapi:api','cors', 'json.response']],function(){
+Route::group(['middleware'=>['auth.api','cors', 'json.response']],function(){
     Route::get('categories',[ResourceController::class,'categories']);
     Route::get('types',[ResourceController::class,'types']);
     Route::get('products',[ResourceController::class,'products']);
     Route::get('notifications',[ResourceController::class,'notifications']);
 });
 
+Route::group(['middleware'=>['auth.api','cors', 'json.response'],'prefix'=>'auth'],function(){
+    Route::post('logout',[AuthController::class,'logout']);
+});
+
 Route::group(['middleware'=>['authapi:api','cors', 'json.response'],'prefix'=>'auth'],function(){
     Route::get('me',[AuthController::class,'me']);
-    Route::post('logout',[AuthController::class,'logout']);
 });

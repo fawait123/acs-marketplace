@@ -4,10 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-
-class AuthApiMiddleware extends Middleware
+class AuthenticateMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,13 +14,14 @@ class AuthApiMiddleware extends Middleware
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-
-    protected function redirectTo($request)
+    public function handle(Request $request, Closure $next)
     {
-        if (!$request->expectsJson()) {
-            return response([
-                'status'=>401
+        if(!$request->user()){
+            return response()->json([
+                'status'=>401,
+                'message'=>'Anauthorize'
             ]);
         }
+        return $next($request);
     }
 }
