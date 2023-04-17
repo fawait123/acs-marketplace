@@ -64,6 +64,10 @@ class ResourceController extends Controller
                 $query = $query->where('title','like','%'. $meta['search'].'%')->orWhere('body','like','%'. $meta['search'].'%');
             }
 
+            if($request->filled('machine_id')){
+                $query = $query->where('machine_id',$request->machine_id);
+            }
+
             if($request->filled('id')){
                 $query = $query->where('id',$request->id);
             }
@@ -84,7 +88,7 @@ class ResourceController extends Controller
                 'data'=>$data
             ]);
         }catch(Exception $error){
-            return response()->json([
+            return response([
                 'status'=>500,
                 'message'=>$error->getMessage(),
                 'data'=>[]
