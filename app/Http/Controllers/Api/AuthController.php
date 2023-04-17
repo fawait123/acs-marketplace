@@ -24,7 +24,7 @@ class AuthController extends Controller
             }
 
             if(!Hash::check($request->password,$user->password)){
-                return response()->json([
+                return response([
                     'status'=>404,
                     'message'=>'The credentials dosnt match to our record',
                     'data'=>[]
@@ -32,7 +32,7 @@ class AuthController extends Controller
             }
 
             if($user->is_active ==0){
-                return response()->json([
+                return response([
                     'status'=>400,
                     'message'=>'The Account is non active',
                     'data'=>[]
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
             $token = $user->createToken('CarShop API Token')->accessToken;
 
-            return response()->json([
+            return response([
                 'status'=>200,
                 'message'=>'Login Success',
                 'data'=>[
@@ -49,7 +49,7 @@ class AuthController extends Controller
                 ]
             ]);
         } catch (Exception $error) {
-            return response()->json([
+            return response([
                 'status'=>500,
                 'message'=>$error->getMessage()
             ]);
@@ -58,7 +58,7 @@ class AuthController extends Controller
 
     public function unauthenticate()
     {
-        return response()->json([
+        return response([
             'status'=>401,
             'message'=>'Anauthorized',
             'data'=>[]
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json([
+        return response([
             'status'=>200,
             'message'=>'profile',
             'data'=>[
