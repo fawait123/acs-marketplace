@@ -61,7 +61,7 @@ class ResourceController extends Controller
             $query = $query->with(['details','type','machine','market']);
 
             if($meta['search'] != ''){
-                $query = $query->where('title','like','%'. $meta['search'].'%')->orWhere('body','like','%'. $meta['search'].'%');
+                $query = $query->where('name','like','%'. $meta['search'].'%')->orWhere('body','like','%'. $meta['search'].'%');
             }
 
             if($request->filled('machine_id')){
