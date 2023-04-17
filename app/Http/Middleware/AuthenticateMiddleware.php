@@ -17,7 +17,7 @@ class AuthenticateMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(!$request->user()){
-            return response()->json([
+            return response([
                 'status'=>401,
                 'message'=>'Anauthorize'
             ]);

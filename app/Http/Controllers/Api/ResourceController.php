@@ -58,7 +58,7 @@ class ResourceController extends Controller
         try{
             $meta = Pagination::defaultMetaInput($request->only(['page','perPage','order','dir','search']));
             $query = Asset::query();
-            $query = $query->with(['userTo','userFrom']);
+            $query = $query->with(['details','type','machine','market']);
 
             if($meta['search'] != ''){
                 $query = $query->where('title','like','%'. $meta['search'].'%')->orWhere('body','like','%'. $meta['search'].'%');
