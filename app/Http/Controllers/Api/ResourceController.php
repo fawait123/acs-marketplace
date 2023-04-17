@@ -16,7 +16,7 @@ class ResourceController extends Controller
     public function categories(Request $request)
     {
             try{
-                $categories = Machine::latest()->get();
+                $categories = Machine::with('assets')->latest()->get();
                 return response()->json([
                     'code'=>200,
                     'status'=>'List Categories',
